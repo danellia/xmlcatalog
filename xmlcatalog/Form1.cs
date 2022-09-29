@@ -15,7 +15,7 @@ namespace xmlcatalog
         public Form1()
         {
             InitializeComponent();
-            serializer = new Serializer();
+            serializer = new CatalogSerializer();
         }
 
         private void loadXMLToolStripMenuItem_Click(object sender, EventArgs e)
@@ -44,19 +44,33 @@ namespace xmlcatalog
                 foreach(var cd in catalog.CD)
                 {
                     ListViewItem item = new ListViewItem();
-                    item.SubItems.Add(new ListViewItem.ListViewSubItem(item, cd.title));
-                    item.SubItems.Add(new ListViewItem.ListViewSubItem(item, cd.artist));
-                    item.SubItems.Add(new ListViewItem.ListViewSubItem(item, cd.country));
-                    item.SubItems.Add(new ListViewItem.ListViewSubItem(item, cd.company));
-                    item.SubItems.Add(new ListViewItem.ListViewSubItem(item, cd.price.ToString()));
-                    item.SubItems.Add(new ListViewItem.ListViewSubItem(item, cd.year.ToString()));
+                    createSubItem(item, cd.title);
+                    createSubItem(item, cd.artist);
+                    createSubItem(item, cd.country);
+                    createSubItem(item, cd.company);
+                    createSubItem(item, cd.price.ToString());
+                    createSubItem(item, cd.year.ToString());
                     listView1.Items.Add(item);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Load XML file first!");
+                MessageBox.Show("Load non-empty XML file first!");
             }
+        }
+
+        private void createSubItem(ListViewItem item, string value)
+        {
+            string itemValue;
+            if (value == "" || value == "0" || value == null)
+            {
+                itemValue = "-";
+            }
+            else
+            {
+                itemValue = value;
+            }
+            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, itemValue));
         }
     }
 }

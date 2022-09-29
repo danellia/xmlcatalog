@@ -32,12 +32,18 @@ namespace xmlcatalog
         public int year { get; set; }
     }
 
-    public class Serializer
+    public abstract class Serializer
     {
-        public Catalog deserialize(string path)
+        public abstract Catalog deserialize(string path);
+        protected XmlSerializer xmlSerializer { get; set; }
+        protected Catalog catalog { get; set; }
+    }
+
+    public class CatalogSerializer : Serializer
+    {
+        public override Catalog deserialize(string path)
         {
-            Catalog catalog;
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Catalog), new XmlRootAttribute("CATALOG"));
+            xmlSerializer = new XmlSerializer(typeof(Catalog), new XmlRootAttribute("CATALOG"));
             using (StreamReader reader = new StreamReader(path))
             {
                 catalog = (Catalog)xmlSerializer.Deserialize(reader);
